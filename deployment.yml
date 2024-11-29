@@ -1,32 +1,32 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
+apiVersion: apps/v1               # apps/v1 specifies the version of the Kubernetes API being used and the resource type (Deployment)
+kind: Deployment                  # Deployment indicates that this YAML defines a Deployment object.
+metadata:                         # section includes metadata about the Deployment, such as its name and labels.
   name: myapp
   labels:
     app: myapp
-spec:
-  replicas: 1
-  selector:
+spec:                             # section defines the desired state for the Deployment, including the number of replicas, update strategy, and pod template.
+  replicas: 1                     #  1 specifies that there should be one replica of the application running.
+  selector:                       # defines how the Deployment finds which Pods to manage, using labels.
     matchLabels:
       app: myapp
-  strategy:
+  strategy:                       # specifies the update strategy for the Deployment, here using rolling updates with certain constraints.
     rollingUpdate:
       maxSurge: 25%
       maxUnavailable: 25%
     type: RollingUpdate
-  template:
+  template:                       # describes the Pod template used for creating new Pods.
     metadata:
       labels:
         app: myapp
     spec:
-      containers:
-      - image: us.icr.io/<your SN labs namespace>/myapp:v1
-        imagePullPolicy: Always
-        name: myapp
-        ports:
+      containers:                 # lists the containers within the Pod.
+      - image: us.icr.io/sn-labs-vamega13/myapp:v1 # specifies the Docker image to use for the container.
+        imagePullPolicy: Always    # Always ensures that the latest image is always pulled from the registry.
+        name: myapp                #  assigns a name to the container.
+        ports:                     # section specifies which ports should be exposed by the container.
         - containerPort: 3000
           name: http
-        resources:
+        resources:                # defines resource requests and limits for the container, such as CPU.
           limits:
             cpu: 50m
           requests:
